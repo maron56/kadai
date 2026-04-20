@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>入間航空祭 撮影スポット - Sky Flight Gallery</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            background: #f0f8ff; 
+            margin: 0; 
+            padding: 20px; 
+            line-height: 1.6;
+        }
+        h1 { 
+            color: #007bff; 
+            margin-bottom: 30px; 
+        }
+        .content {
+            text-align: left;
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .section-title {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #003399;
+            border-left: 5px solid #007bff;
+            padding-left: 10px;
+            margin: 25px 0 15px 0;
+        }
+        .spot-item {
+            margin-bottom: 20px;
+            padding-left: 15px;
+        }
+        .spot-name {
+            font-weight: bold;
+            color: #d63384;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .map-link {
+            cursor: pointer;
+            text-decoration: underline;
+            color: #007bff;
+        }
+        .map-link:hover {
+            color: #0056b3;
+            background-color: rgba(0, 123, 255, 0.05);
+        }
+        .back-link { 
+            display: inline-block; 
+            margin-top: 30px; 
+            padding: 10px 20px; 
+            background: #007bff; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 5px; 
+            font-weight: bold;
+        }
+        .back-link:hover { 
+            background: #0056b3; 
+        }
+    </style>
+</head>
+<body>
+    <h1>入間航空祭 撮影スポット</h1>
+    
+    <div class="content">
+        <p>入間航空祭（入間基地）は、毎年数十万人が訪れる国内最大級の航空イベントです。基地内から撮るか、基地外の定番スポットで撮るかによって、写真の雰囲気が大きく変わります。</p>
+
+        <div class="section-title">１．基地内エリア（臨場感と地上展示重視）</div>
+        
+        <div class="spot-item">
+            <span class="spot-name map-link" onclick="openMap('入間基地')">★エプロン（飛行場舗装エリア）</span>
+            狙い目: ブルーインパルスのウォークイン、各種機体の地上展示、タキシング。<br>
+            特  徴: 離着陸の迫力に加え、パイロットや整備士の動きなど「人」を感じる写真が撮れます。<br>
+            注  意: 大混雑するため、最前列を確保するには早朝からの並びが必須です。
+        </div>
+
+        <div class="spot-item">
+            <span class="spot-name map-link" onclick="openMap('入間基地')">★滑走路付近（基地内北側）</span>
+            狙い目: 離陸時のベーパー（水蒸気）や着陸の接地瞬間。<br>
+            特  徴: C-2やT-4などの入間ゆかりの機体が目の前を通過します。
+        </div>
+
+        <div class="section-title">２． 基地外エリア（飛行展示・ひねり重視）</div>
+
+        <div class="spot-item">
+            <span class="spot-name map-link" onclick="openMap('狭山稲荷山公園')">★稲荷山公園（北側エリア）</span>
+            狙い目: 展示飛行中の旋回（ひねり）、ブルーインパルスの演目全体。<br>
+            特  徴: 基地に隣接しており、高い木が少ない場所を選べば、空を広く使ったダイナミックな構図が狙えます。
+        </div>
+
+        <div class="spot-item">
+            <span class="spot-name">★特設観覧エリア（周辺のコインパーキングや私有地解放）</span>
+            狙い目: 進入してくる機体の腹部、編隊飛行。<br>
+            特  徴: 基地外の踏切付近などは、着陸態勢に入る機体を真下に近い角度から狙えるポイントが点在します。
+        </div>
+    </div>
+
+    <br>
+    <a href="index.html" class="back-link" onclick="history.back(); return false;">元のページへ戻る</a>
+
+    <script>
+        function openMap(query) {
+            const width = 800;
+            const height = 600;
+            const left = (window.screen.width - width) / 2;
+            const top = (window.screen.height - height) / 2;
+            const url = `https://www.google.com/maps?q=${encodeURIComponent(query)}`;
+            
+            window.open(url, '_blank', `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`);
+        }
+    </script>
+</body>
+</html>
