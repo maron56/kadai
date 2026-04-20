@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>羽田空港 撮影スポット - Sky Flight Gallery</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            background: #f0f8ff; 
+            margin: 0; 
+            padding: 20px; 
+            line-height: 1.6;
+        }
+        h1 { 
+            color: #007bff; 
+            margin-bottom: 30px; 
+        }
+        .content {
+            text-align: left;
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .section-title {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #003399;
+            border-left: 5px solid #007bff;
+            padding-left: 10px;
+            margin: 25px 0 15px 0;
+        }
+        .spot-item {
+            margin-bottom: 20px;
+            padding-left: 15px;
+        }
+        .spot-name {
+            font-weight: bold;
+            color: #d63384;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .map-link {
+            cursor: pointer;
+            text-decoration: underline;
+            color: #007bff;
+        }
+        .map-link:hover {
+            color: #0056b3;
+            background-color: rgba(0, 123, 255, 0.05);
+        }
+        .back-link { 
+            display: inline-block; 
+            margin-top: 30px; 
+            padding: 10px 20px; 
+            background: #007bff; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 5px; 
+            font-weight: bold;
+        }
+        .back-link:hover { 
+            background: #0056b3; 
+        }
+    </style>
+</head>
+<body>
+    <h1>羽田空港 撮影スポット</h1>
+    
+    <div class="content">
+        <p>羽田空港での写真撮影は、風向きや時間帯によって狙えるカットが大きく変わるのが魅力です。</p>
+
+        <div class="section-title">１. ターミナル内の展望デッキ（定番・利便性重視）</div>
+        
+        <div class="spot-item">
+            <span class="spot-name">★第１ターミナル 展望デッキ</span>
+            狙い目: A滑走路（16R/34L）の離着陸。<br>
+            特  徴: 西向きのため、夕暮れ時には富士山と機体を絡めたドラマチックな写真が狙えます。JAL機がメインです。
+        </div>
+
+        <div class="spot-item">
+            <span class="spot-name">★第２ターミナル 展望デッキ</span>
+            狙い目: C滑走路（16L/34R）の離着陸。<br>
+            特  徴: 東向きで、午前中が順光。背景に東京湾の海やスカイツリー、ゲートブリッジを入れた開放感のある構図が人気です。ANA機がメインです。
+        </div>
+
+        <div class="spot-item">
+            <span class="spot-name">★第３ターミナル 展望デッキ</span>
+            狙い目: 国際線機体、B滑走路（22）への着陸。<br>
+            特  徴: 24時間開放されており、夜の空港のきらびやかな雰囲気を撮るのに最適。世界中の多様な航空会社の機体が見られます。
+        </div>
+
+        <div class="section-title">２. 空港周辺の公園・施設（迫力・変化球重視）</div>
+
+        <div class="spot-item">
+            <span class="spot-name map-link" onclick="openMap('城南島海浜公園')">・城南島海浜公園</span>
+            狙い目: B滑走路（22）への着陸。<br>
+            特  徴: 頭のすぐ上を巨大な機体が通過する、圧倒的な迫力。広角レンズで空の広さを強調するのも、望遠で機体の一部を切り取るのも面白いスポットです。
+        </div>
+
+        <div class="spot-item">
+            <span class="spot-name map-link" onclick="openMap('京浜島つばさ公園')">・京浜島つばさ公園</span>
+            狙い目: B滑走路（22）の着陸、C滑走路（34R）の離陸。<br>
+            特  徴: ターミナルの対岸に位置し、滑走路と平行に長く伸びているため、機体の真横（真横カット）を撮るのに向いています。
+        </div>
+
+        <div class="spot-item">
+            <span class="spot-name map-link" onclick="openMap('羽田イノベーションシティ 足湯スカイデッキ')">・羽田イノベーションシティ（足湯スカイデッキ）</span>
+            狙い目: B滑走路（22）の離陸、A滑走路（16R）の着陸。<br>
+            特  徴: 天空橋駅直結。足湯に浸かりながら、駐機場や滑走路を少し高い視点から眺められます。近代的な建物と機体の組み合わせが新鮮です。
+        </div>
+    </div>
+
+    <br>
+    <a href="index.html" class="back-link" onclick="history.back(); return false;">元のページへ戻る</a>
+
+    <script>
+        function openMap(query) {
+            const width = 800;
+            const height = 600;
+            const left = (window.screen.width - width) / 2;
+            const top = (window.screen.height - height) / 2;
+            const url = `https://www.google.com/maps?q=${encodeURIComponent(query)}`;
+            
+            window.open(url, '_blank', `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`);
+        }
+    </script>
+</body>
+</html>
