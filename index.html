@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>飛行機写真ギャラリー</title>
+
+<style>
+/* ===== 空色背景 ===== */
+body{
+    margin:0;
+    overflow:hidden;
+    background:
+        url('img/img100.jpg') center top / 100% calc(100vh - 240px) no-repeat,
+        linear-gradient(to bottom,#6ec1ff,#87ceeb,#bfe9ff);
+}
+
+/* ===== メイン画像 ===== */
+#main-image{
+    position:absolute;
+    top: 40px;
+    left:30px;
+    right:auto;
+    transform:none;
+    width:auto;
+    max-width:55%;
+    max-height:55vh;
+    border:8px solid rgba(255,255,255,0.8);
+    border-radius:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+    z-index:5;
+}
+
+/* ===== 滑走路 ===== */
+.runway{
+    position:absolute;
+    bottom:40px;  /* 下に移動 */
+    width:100%;
+    height:140px;
+    background:#555;
+    z-index:1;
+}
+
+/* 滑走路番号 */
+.runway::before{
+    content:"16";
+    position:absolute;
+    left:5%;
+    top:50%;
+    transform:translate(-50%, -50%) rotate(90deg);
+    transform-origin:center center;
+    color:#fff;
+    font-size:6rem;
+    font-weight:bold;
+    letter-spacing:0.1em;
+}
+
+/* 中央ライン */
+.runway::after{
+    content:"";
+    position:absolute;
+    top:50%;
+    width:100%;
+    height:4px;
+    background:repeating-linear-gradient(
+        to right,
+        #eee 0 40px,
+        transparent 40px 80px
+    );
+}
+
+/* ===== 飛行機 ===== */
+.airplane{
+    position:absolute;
+    bottom:60px;  /* 下に移動 */
+    left:0;
+    width:120px;
+    z-index:10;
+    animation:runwayMove 10s linear infinite;
+}
+
+/* 左→右＋遠ざかる */
+@keyframes runwayMove{
+    0%{
+        transform:translateX(0) scale(1.2);
+    }
+    50%{
+        transform:translateX(50vw) scale(0.8);
+    }
+    100%{
+        transform:translateX(110vw) scale(0.5);
+    }
+}
+
+/* ===== タイトル ===== */
+.title{
+    position:absolute;
+    top:20px;
+    left:200px;
+    right:0;
+    width:auto;
+    text-align:center;
+    color:#003399;
+    font-size:2em;
+}
+
+/* ===== サブページリンク ===== */
+.airport-links{
+    position:absolute;
+    top:160px;
+    right:70px;
+    left:auto;
+    transform:none;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    z-index:10;
+}
+
+.airport-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.airport-row a,
+.airport-row span{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:10px 16px;
+    background:rgba(255,255,255,0.9);
+    color:#333;
+    text-decoration:none;
+    border-radius:10px;
+    border:2px solid rgba(0,0,0,0.12);
+    font-weight:600;
+    box-shadow:0 4px 12px rgba(0,0,0,0.12);
+    min-width:100px;
+}
+
+.airport-row .airport-name{
+    background:rgba(0,0,0,0.45);
+    color:#fff;
+    border-color:rgba(255,255,255,0.3);
+}
+
+.airport-row .airport-link{
+    background:rgba(255,255,255,0.85);
+}
+
+.airport-row a:hover{
+    transform:translateY(-2px);
+    background:#fff;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">Sky Flight Gallery</div>
+<div class="airport-links">
+    <div class="airport-row">
+        <span class="airport-name">羽田空港</span>
+        <a class="airport-link" href="haneda.html">Gyarary</a>
+        <a class="airport-link" href="https://www.google.com/maps?q=Haneda+Airport">MAP</a>
+        <a class="airport-link" href="https://www.google.com/search?q=Haneda+Airport+weather">今日の天気</a>
+    </div>
+    <div class="airport-row">
+        <span class="airport-name">成田空港</span>
+        <a class="airport-link" href="narita.html">Gyarary</a>
+        <a class="airport-link" href="https://www.google.com/maps?q=Narita+Airport">MAP</a>
+        <a class="airport-link" href="https://www.google.com/search?q=Narita+Airport+weather">今日の天気</a>
+    </div>
+    <div class="airport-row">
+        <span class="airport-name">入間航空祭</span>
+        <a class="airport-link" href="iruma.html">Gyarary</a>
+        <a class="airport-link" href="https://www.google.com/maps?q=Iruma+Air+Base">MAP</a>
+        <a class="airport-link" href="https://www.google.com/search?q=Iruma+Air+Base+weather">今日の天気</a>
+    </div>
+    <div class="airport-row">
+        <a class="airport-link" href="http://www.flightradar24.com/35.57,138.64/8">Flight Radar</a>
+    </div>
+</div>
+
+<!-- メイン画像 -->
+<img id="main-image" src="img/img27.JPG" alt="メイン画像">
+
+<!-- 飛行機 -->
+<img class="airplane" src="img/anime3.png" alt="飛行機">
+
+<!-- 滑走路 -->
+<div class="runway"></div>
+
+<script>
+const mainImage = document.getElementById('main-image');
+const imageFiles = ['img/img11.JPG', 'img/img16.JPG', 'img/img21.JPG', 'img/imgI_25.JPG'];
+let currentIndex = 0;
+setInterval(() => {
+    currentIndex = (currentIndex + 1) % imageFiles.length;
+    mainImage.src = imageFiles[currentIndex];
+}, 2000);
+
+document.querySelectorAll('.airport-link').forEach(link => {
+    const href = link.getAttribute('href');
+    if (href && (href.includes('google.com/maps') || href.includes('google.com/search') || href.includes('flightradar24.com'))) {
+        link.addEventListener('click', event => {
+            event.preventDefault();
+            window.open(href, '_blank', 'width=800,height=600,resizable=yes,scrollbars=yes');
+        });
+    }
+});
+</script>
+
+</body>
+</html>
