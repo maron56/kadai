@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Break Jigsaw Puzzle</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --bg-color: #f5f7fa;
+            --panel-color: #ffffff;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #333;
+        }
+
+        h1 {
+            margin-top: 20px;
+            font-weight: 300;
+            color: var(--primary-color);
+        }
+
+        /* 画像選択エリア */
+        #image-selector {
+            margin: 20px;
+            padding: 15px;
+            background: var(--panel-color);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .thumb-container {
+            text-align: center;
+            border: 2px solid transparent;
+            padding: 5px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .thumb-container:hover {
+            border-color: var(--primary-color);
+        }
+
+        .thumbnail {
+            width: 100px;
+            height: 75px;
+            object-fit: cover;
+            display: block;
+            margin-bottom: 5px;
+            border-radius: 4px;
+        }
+
+        button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* パズルエリア */
+        .main-layout {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            justify-content: center;
+            width: 95%;
+            margin-top: 20px;
+            margin-bottom: 50px;
+        }
+
+        #game-container {
+            position: relative;
+            width: 500px;
+            height: 400px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+        }
+
+        #puzzle-board {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px dashed #4a90e2;
+            border-radius: 8px;
+            box-sizing: border-box;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* 参照画像エリア */
+        #reference-panel {
+            background: var(--panel-color);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            max-width: 340px;
+            border: 1px solid #eee;
+        }
+
+        #reference-panel h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .reference-image-wrapper {
+            width: 300px;
+            height: 240px;
+            overflow: hidden;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            background: #eee;
+        }
+
+        #reference-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .piece {
+            position: absolute;
+            cursor: grab;
+            filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.2));
+            z-index: 10;
+            user-select: none;
+            transition: transform 0.2s ease;
+        }
+
+        .piece:hover {
+            transform: scale(1.02);
+            z-index: 100;
+        }
+
+        .piece:active {
+            cursor: grabbing;
+            transform: scale(1.05);
+            z-index: 1000;
+        }
+
+        .piece.locked {
+            filter: none;
+            cursor: default;
+            z-index: 1;
+            transform: none;
+        }
+
+        /* 降参ボタン */
+        #give-up-btn {
+            margin-top: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 25px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+            display: none;
+        }
+
+        #give-up-btn:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        #give-up-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* 祝賀オーバーレイ */
+        #congrats-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            backdrop-filter: blur(8px);
+        }
+
+        .congrats-content {
+            text-align: center;
+            color: white;
+        }
+
+        .congrats-content h2 {
+            font-size: 6rem;
+            margin: 0;
+            background: linear-gradient(to right, #f1c40f, #e67e22, #f1c40f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px rgba(241, 196, 15, 0.5));
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .congrats-content p {
+            font-size: 1.5rem;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease 0.8s forwards;
+        }
+
+        #close-congrats {
+            margin-top: 40px;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            background: var(--primary-color);
+            opacity: 0;
+            animation: fadeIn 0.5s ease 1.2s forwards;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 紙吹雪 */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            z-index: 10001;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Jigsaw Break</h1>
+
+    <div id="image-selector">
+        <div class="thumb-container">
+            <img src="img/imgH01.JPG" class="thumbnail" alt="羽田空港">
+            <button onclick="startGame('img/imgH01.JPG')">画像を選択</button>
+        </div>
+        <div class="thumb-container">
+            <img src="img/imgN01.JPG" class="thumbnail" alt="成田空港">
+            <button onclick="startGame('img/imgN01.JPG')">画像を選択</button>
+        </div>
+        <div class="thumb-container">
+            <img src="img/imgI_10.JPG" class="thumbnail" alt="入間基地">
+            <button onclick="startGame('img/imgI_10.JPG')">画像を選択</button>
+        </div>
+        <div class="thumb-container">
+            <label for="local-file" style="display: inline-block; width: 100px; height: 75px; border: 2px dashed #4a90e2; border-radius: 4px; line-height: 75px; text-align: center; cursor: pointer; color: #4a90e2; margin-bottom: 5px; font-size: 11px; background: rgba(74, 144, 226, 0.05); user-select: none;">
+                ＋自分の画像追加
+            </label>
+            <input type="file" id="local-file" accept="image/*" style="display: none;" onchange="handleFileUpload(event)">
+            <button onclick="document.getElementById('local-file').click()">PCから選択</button>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <div id="game-container">
+            <div id="puzzle-board"></div>
+            <div id="pieces-container"></div>
+        </div>
+
+        <div id="reference-panel">
+            <h3>完成見本 (Reference)</h3>
+            <div class="reference-image-wrapper">
+                <img id="reference-image" src="" alt="Complete Puzzle Image">
+            </div>
+            <button id="give-up-btn" onclick="giveUp()">降参して完成させる</button>
+        </div>
+    </div>
+
+    <div id="congrats-overlay">
+        <div class="congrats-content">
+            <h2>Congratulations!</h2>
+            <p>見事にパズルを完成させました！</p>
+            <button id="close-congrats" onclick="hideCongratulations()">もう一度遊ぶ</button>
+        </div>
+    </div>
+
+    <script>
+        const boardWidth = 500;
+        const boardHeight = 400;
+        const cols = 5;
+        const rows = 4;
+        // 整数値にして端数問題を回避
+        const pieceWidth = Math.floor(boardWidth / cols);
+        const pieceHeight = Math.floor(boardHeight / rows);
+        const snapTolerance = 30;
+
+        let activePiece = null;
+        let offset = { x: 0, y: 0 };
+
+        // ジグソーパズルの形状を生成する関数
+        function getClipPath(c, r, hEdges, vEdges) {
+            const T = 15; // タブのサイズ(px)
+            const W = pieceWidth + T * 2;
+            const H = pieceHeight + T * 2;
+
+            const pT = (T / H) * 100;
+            const pB = ((T + pieceHeight) / H) * 100;
+            const pL = (T / W) * 100;
+            const pR = ((T + pieceWidth) / W) * 100;
+            const pMidX = 50;
+            const pMidY = 50;
+            const pS = 10; // タブの幅の半分(%)
+
+            // 各辺の形状（1: 凸, -1: 凹, 0: 平坦）
+            const top = hEdges[r][c];
+            const bottom = hEdges[r + 1][c];
+            const left = vEdges[r][c];
+            const right = vEdges[r][c + 1];
+
+            let path = "";
+
+            // Top edge (clockwise)
+            path += `${pL} ${pT}`;
+            if (top !== 0) {
+                const y = top > 0 ? 0 : pT * 2;
+                path += `, ${pMidX - pS} ${pT}, ${pMidX - pS} ${y}, ${pMidX + pS} ${y}, ${pMidX + pS} ${pT}`;
+            }
+            path += `, ${pR} ${pT}`;
+
+            // Right edge
+            if (right !== 0) {
+                const x = right > 0 ? 100 : pR - (100 - pR);
+                path += `, ${pR} ${pMidY - pS}, ${x} ${pMidY - pS}, ${x} ${pMidY + pS}, ${pR} ${pMidY + pS}`;
+            }
+            path += `, ${pR} ${pB}`;
+
+            // Bottom edge
+            if (bottom !== 0) {
+                const y = bottom > 0 ? 100 : pB - (100 - pB);
+                path += `, ${pMidX + pS} ${pB}, ${pMidX + pS} ${y}, ${pMidX - pS} ${y}, ${pMidX - pS} ${pB}`;
+            }
+            path += `, ${pL} ${pB}`;
+
+            // Left edge
+            if (left !== 0) {
+                const x = left > 0 ? 0 : pL * 2;
+                path += `, ${pL} ${pMidY + pS}, ${x} ${pMidY + pS}, ${x} ${pMidY - pS}, ${pL} ${pMidY - pS}`;
+            }
+
+            return `polygon(${path})`;
+        }
+
+        function startGame(imgSrc) {
+            const piecesContainer = document.getElementById('pieces-container');
+            const refImg = document.getElementById('reference-image');
+            const giveUpBtn = document.getElementById('give-up-btn');
+
+            // Data URLの場合はキャッシュブースターを付与しない
+            const isDataUrl = imgSrc.startsWith('data:');
+            const finalSrc = isDataUrl ? imgSrc : imgSrc + "?v=" + Date.now();
+            
+            refImg.src = finalSrc;
+            refImg.style.display = 'block';
+            giveUpBtn.style.display = 'inline-block';
+
+            // 完全に初期化
+            piecesContainer.innerHTML = '';
+            const T = 20; // 遊び（タブのサイズ）
+
+            // 形状のランダム化
+            const hEdges = [];
+            for (let r = 0; r <= rows; r++) {
+                hEdges[r] = Array.from({ length: cols }, () => (r === 0 || r === rows) ? 0 : (Math.random() > 0.5 ? 1 : -1));
+            }
+            const vEdges = [];
+            for (let r = 0; r < rows; r++) {
+                vEdges[r] = Array.from({ length: cols + 1 }, (_, c) => (c === 0 || c === cols) ? 0 : (Math.random() > 0.5 ? 1 : -1));
+            }
+
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    const piece = document.createElement('div');
+                    piece.className = 'piece';
+
+                    // 正確な座標計算
+                    const targetX = c * pieceWidth - T;
+                    const targetY = r * pieceHeight - T;
+
+                    piece.style.width = (pieceWidth + T * 2) + 'px';
+                    piece.style.height = (pieceHeight + T * 2) + 'px';
+                    piece.style.backgroundImage = `url(${finalSrc})`;
+                    piece.style.backgroundSize = `${boardWidth}px ${boardHeight}px`;
+                    // 背景位置をターゲットに完全に同期させる (ここが重要)
+                    piece.style.backgroundPosition = `${-targetX}px ${-targetY}px`;
+
+                    const currentPieceEdges = {
+                        top: hEdges[r][c],
+                        bottom: -hEdges[r + 1][c],
+                        left: vEdges[r][c],
+                        right: -vEdges[r][c + 1]
+                    };
+
+                    piece.style.clipPath = getClipPathSpecial(currentPieceEdges, T);
+
+                    piece.dataset.targetX = targetX;
+                    piece.dataset.targetY = targetY;
+
+                    // バラバラに配置
+                    const randX = (Math.random() * (boardWidth - pieceWidth)) - 100;
+                    const randY = boardHeight + 20 + (Math.random() * 100);
+                    piece.style.left = randX + 'px';
+                    piece.style.top = randY + 'px';
+
+                    piece.addEventListener('mousedown', startDrag);
+                    piece.addEventListener('touchstart', startDrag, { passive: false });
+
+                    piecesContainer.appendChild(piece);
+                }
+            }
+        }
+
+        function getClipPathSpecial(edges, T) {
+            const W = pieceWidth + T * 2;
+            const H = pieceHeight + T * 2;
+            const pT = (T / H) * 100;
+            const pB = ((H - T) / H) * 100;
+            const pL = (T / W) * 100;
+            const pR = ((W - T) / W) * 100;
+
+            let path = `${pL}% ${pT}%`;
+            // Top
+            if (edges.top !== 0) {
+                const y = edges.top > 0 ? 0 : pT * 2;
+                path += `, 40% ${pT}%, 40% ${y}%, 60% ${y}%, 60% ${pT}%`;
+            }
+            path += `, ${pR}% ${pT}%`;
+            // Right
+            if (edges.right !== 0) {
+                const x = edges.right > 0 ? 100 : pR - (100 - pR);
+                path += `, ${pR}% 40%, ${x}% 40%, ${x}% 60%, ${pR}% 60%`;
+            }
+            path += `, ${pR}% ${pB}%`;
+            // Bottom
+            if (edges.bottom !== 0) {
+                const y = edges.bottom > 0 ? 100 : pB - (100 - pB);
+                path += `, 60% ${pB}%, 60% ${y}%, 40% ${y}%, 40% ${pB}%`;
+            }
+            path += `, ${pL}% ${pB}%`;
+            // Left
+            if (edges.left !== 0) {
+                const x = edges.left > 0 ? 0 : pL * 2;
+                path += `, ${pL}% 60%, ${x}% 60%, ${x}% 40%, ${pL}% 40%`;
+            }
+            return `polygon(${path})`;
+        }
+
+        function startDrag(e) {
+            if (this.classList.contains('locked')) return;
+            e.preventDefault();
+            activePiece = this;
+            const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+
+            const rect = activePiece.getBoundingClientRect();
+            offset.x = clientX - rect.left;
+            offset.y = clientY - rect.top;
+
+            window.addEventListener('mousemove', drag);
+            window.addEventListener('touchmove', drag, { passive: false });
+            window.addEventListener('mouseup', endDrag);
+            window.addEventListener('touchend', endDrag);
+        }
+
+        function drag(e) {
+            if (!activePiece) return;
+            const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+
+            // コンテナ上の相対座標にする
+            const container = document.getElementById('game-container');
+            const rect = container.getBoundingClientRect();
+
+            activePiece.style.left = (clientX - rect.left - offset.x) + 'px';
+            activePiece.style.top = (clientY - rect.top - offset.y) + 'px';
+        }
+
+        function endDrag() {
+            if (!activePiece) return;
+
+            const currentX = parseFloat(activePiece.style.left);
+            const currentY = parseFloat(activePiece.style.top);
+            const targetX = parseFloat(activePiece.dataset.targetX);
+            const targetY = parseFloat(activePiece.dataset.targetY);
+
+            // スナップ判定
+            if (Math.abs(currentX - targetX) < snapTolerance && Math.abs(currentY - targetY) < snapTolerance) {
+                activePiece.style.left = targetX + 'px';
+                activePiece.style.top = targetY + 'px';
+                activePiece.classList.add('locked');
+                checkCompletion();
+            }
+
+            activePiece = null;
+            window.removeEventListener('mousemove', drag);
+            window.removeEventListener('touchmove', drag);
+        }
+
+        function checkCompletion() {
+            const lockedCount = document.querySelectorAll('.piece.locked').length;
+            if (lockedCount === rows * cols) {
+                setTimeout(showCongratulations, 500);
+            }
+        }
+
+        function showCongratulations() {
+            document.getElementById('congrats-overlay').style.display = 'flex';
+            document.getElementById('give-up-btn').style.display = 'none';
+            launchConfetti();
+        }
+
+        function hideCongratulations() {
+            document.getElementById('congrats-overlay').style.display = 'none';
+        }
+
+        function launchConfetti() {
+            const colors = ['#f1c40f', '#e67e22', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6'];
+            for (let i = 0; i < 150; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+
+                const duration = 3 + Math.random() * 3;
+                confetti.style.animation = `confettiFall ${duration}s linear forwards`;
+
+                // 動的なキーフレームを個別に設定するのは難しいため、CSSで基本を作り座標をJSで調整
+                document.body.appendChild(confetti);
+
+                const animation = confetti.animate([
+                    { transform: `translateY(0) rotate(0)`, opacity: 1 },
+                    { transform: `translateY(110vh) rotate(${Math.random() * 360 * 5}deg)`, opacity: 0 }
+                ], {
+                    duration: duration * 1000,
+                    easing: 'linear'
+                });
+
+                animation.onfinish = () => confetti.remove();
+            }
+        }
+
+        function giveUp() {
+            if (!confirm("本当に降参して完成させますか？")) return;
+
+            const pieces = document.querySelectorAll('.piece:not(.locked)');
+            pieces.forEach(piece => {
+                const targetX = piece.dataset.targetX;
+                const targetY = piece.dataset.targetY;
+
+                // アニメーション付きで移動
+                piece.style.transition = 'all 0.5s ease-out';
+                piece.style.left = targetX + 'px';
+                piece.style.top = targetY + 'px';
+
+                setTimeout(() => {
+                    piece.classList.add('locked');
+                    piece.style.transition = 'transform 0.2s ease'; // 元のトランジションに戻す
+
+                    // 最後のピースが動いた後にチェック
+                    const currentLocked = document.querySelectorAll('.piece.locked').length;
+                    if (currentLocked === rows * cols) {
+                        checkCompletion();
+                    }
+                }, 500);
+            });
+
+            document.getElementById('give-up-btn').style.display = 'none';
+        }
+
+        // ローカルファイルを選択した時の処理
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    startGame(e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</body>
+
+</html>
