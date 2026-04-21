@@ -27,7 +27,8 @@
             margin: 0 auto;
         }
 
-        .gallery img {
+        .gallery img,
+        .gallery video {
             width: 100%;
             aspect-ratio: 3 / 2;
             object-fit: cover;
@@ -37,7 +38,8 @@
             cursor: pointer;
         }
 
-        .gallery img:hover {
+        .gallery img:hover,
+        .gallery video:hover {
             transform: scale(1.05);
         }
 
@@ -124,28 +126,45 @@
         <img src="img/imgI_25.JPG" alt="入間航空祭の写真" onclick="openModal(this)">
         <img src="img/imgI_26.JPG" alt="入間航空祭の写真" onclick="openModal(this)">
         <img src="img/imgI_27.JPG" alt="入間航空祭の写真" onclick="openModal(this)">
+        <video src="img/IMG_7103.mov" autoplay loop muted playsinline onclick="openModal(this)"></video>
+        <video src="img/IMG_7113.mov" autoplay loop muted playsinline onclick="openModal(this)"></video>
     </div>
 
     <!-- モーダル -->
     <div id="myModal" class="modal">
         <span class="close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="modalImg">
+        <img class="modal-content" id="modalImg" style="display: none;">
+        <video class="modal-content" id="modalVideo" style="display: none;" controls autoplay loop></video>
     </div>
 
     <br>
     <a href="index.html" onclick="history.back(); return false;">元のページへ戻る</a>
 
     <script>
-        function openModal(img) {
+        function openModal(element) {
             var modal = document.getElementById("myModal");
             var modalImg = document.getElementById("modalImg");
-            modal.style.display = "block";
-            modalImg.src = img.src;
+            var modalVideo = document.getElementById("modalVideo");
+
+            modal.style.display = "flex"; // CSSのalign-itemsを効かせるためflex
+
+            if (element.tagName === 'VIDEO') {
+                modalImg.style.display = "none";
+                modalVideo.style.display = "block";
+                modalVideo.src = element.src;
+            } else {
+                modalVideo.style.display = "none";
+                modalVideo.pause();
+                modalImg.style.display = "block";
+                modalImg.src = element.src;
+            }
         }
 
         function closeModal() {
             var modal = document.getElementById("myModal");
+            var modalVideo = document.getElementById("modalVideo");
             modal.style.display = "none";
+            if (modalVideo) modalVideo.pause();
         }
 
         // ESCキーで閉じる
