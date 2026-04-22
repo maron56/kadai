@@ -11,6 +11,7 @@
         body {
             margin: 0;
             overflow: hidden;
+            height: 100vh;
             background:
                 url('img/img100.jpg') center top / 100% calc(100vh - 240px) no-repeat,
                 linear-gradient(to bottom, #6ec1ff, #87ceeb, #bfe9ff);
@@ -271,7 +272,7 @@
         // 17時以降に背景画像とタイトル色を変更
         const hour = new Date().getHours();
         if (hour >= 17) {
-            document.body.style.backgroundImage = "url('img/img200.jpg'), linear-gradient(to bottom, #6ec1ff, #87ceeb, #bfe9ff)";
+            document.body.style.backgroundImage = "url('img/img200.JPG'), linear-gradient(to bottom, #6ec1ff, #87ceeb, #bfe9ff)";
             document.querySelector('.title').style.color = "#fffaf0"; // 乳白色に変える
         }
 
