@@ -7,11 +7,24 @@
     <title>飛行機写真ギャラリー</title>
 
     <style>
-        /* ===== 空色背景 ===== */
+        /* ===== 全体設定 ===== */
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             margin: 0;
-            overflow: hidden;
+            overflow-x: hidden;
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background: #fff;
+        }
+
+        /* ===== Heroセクション (元のメイン画面) ===== */
+        .hero {
+            position: relative;
             height: 100vh;
+            width: 100%;
+            overflow: hidden;
             background:
                 url('img/img100.jpg') center top / 100% calc(100vh - 240px) no-repeat,
                 linear-gradient(to bottom, #6ec1ff, #87ceeb, #bfe9ff);
@@ -37,14 +50,12 @@
         .runway {
             position: absolute;
             bottom: 75px;
-            /* 文字に被らない範囲で下げる */
             width: 100%;
             height: 140px;
             background: #555;
             z-index: 1;
         }
 
-        /* 滑走路番号 */
         .runway::before {
             content: "16R";
             position: absolute;
@@ -58,7 +69,6 @@
             letter-spacing: 0.1em;
         }
 
-        /* 中央ライン */
         .runway::after {
             content: "";
             position: absolute;
@@ -70,59 +80,26 @@
                     transparent 40px 80px);
         }
 
-        /* ===== ATC（無線）テキスト ===== */
-        .atc-ticker {
-            position: absolute;
-            bottom: 220px; /* 滑走路のすぐ上の空に配置 */
-            width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            z-index: 2;
-        }
-
-        .atc-ticker span {
-            display: inline-block;
-            color: rgba(0, 51, 153, 0.6); /* タイトルカラーと同系の濃い青、透過 */
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 0.9rem;
-            font-weight: bold;
-            animation: atcScroll 45s linear infinite;
-        }
-
-        @keyframes atcScroll {
-            0% {
-                transform: translateX(-100%);
-            }
-
-            100% {
-                transform: translateX(100vw);
-            }
-        }
-
         /* ===== 飛行機 ===== */
         .airplane {
             position: absolute;
             bottom: 95px;
-            /* 滑走路上に維持 */
             left: 0;
             width: 120px;
             z-index: 10;
-            animation: runwayMove 12s linear infinite; /* 10秒移動 + 2秒停止 */
+            animation: runwayMove 12s linear infinite;
         }
 
-        /* 左→右（右端で2秒停止後にリピート） */
         @keyframes runwayMove {
             0% {
                 transform: translateX(-120px) scale(1.2);
             }
 
             83.33% {
-                /* 12秒中の10秒時点 (10/12 = 83.33%) */
                 transform: translateX(calc(100vw - 150px)) scale(0.6);
             }
 
             100% {
-                /* 残りの2秒間同じ場所で停止 */
                 transform: translateX(calc(100vw - 150px)) scale(0.6);
             }
         }
@@ -137,6 +114,7 @@
             text-align: center;
             color: #003399;
             font-size: 2em;
+            transition: color 0.5s;
         }
 
         /* ===== サブページリンク ===== */
@@ -144,8 +122,6 @@
             position: absolute;
             top: 160px;
             right: 70px;
-            left: auto;
-            transform: none;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -172,19 +148,7 @@
             font-weight: 600;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
             min-width: 100px;
-        }
-
-        footer {
-            position: absolute;
-            bottom: 5px;
-            right: 20px;
-            text-align: right;
-            color: #444;
-            font-size: 0.7rem;
-            line-height: 1.2;
-            z-index: 20;
-            font-family: Consolas, "Courier New", monospace;
-            padding: 5px;
+            transition: all 0.3s;
         }
 
         .airport-row .airport-name {
@@ -193,65 +157,812 @@
             border-color: rgba(255, 255, 255, 0.3);
         }
 
-        .airport-row .airport-link {
-            background: rgba(255, 255, 255, 0.85);
-        }
-
         .airport-row a:hover {
             transform: translateY(-2px);
             background: #fff;
+        }
+
+        /* ===== ATC（無線）テキスト ===== */
+        .atc-ticker {
+            position: absolute;
+            bottom: 220px;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .atc-ticker span {
+            display: inline-block;
+            color: rgba(0, 51, 153, 0.6);
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.9rem;
+            font-weight: bold;
+            animation: atcScroll 45s linear infinite;
+        }
+
+        @keyframes atcScroll {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100vw);
+            }
+        }
+
+        /* ===== おもしろ豆知識セクション ===== */
+        .trivia-section {
+            background: linear-gradient(to bottom, #bfe9ff, #ffffff);
+            padding: 100px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .trivia-title {
+            font-size: 2.5rem;
+            color: #003399;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .trivia-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 35px;
+            max-width: 850px;
+            width: 100%;
+            box-shadow: 0 15px 40px rgba(0, 51, 153, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .trivia-card.reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .trivia-card-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .trivia-q-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .trivia-question {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #1a4a9e;
+            line-height: 1.4;
+        }
+
+        .answer-btn {
+            background: linear-gradient(135deg, #003399, #0056b3);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0, 51, 153, 0.2);
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .answer-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 16px rgba(0, 51, 153, 0.3);
+        }
+
+        .trivia-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(0, 51, 153, 0.04);
+            border-radius: 16px;
+            font-size: 1.1rem;
+            color: #333;
+            line-height: 1.7;
+        }
+
+        .trivia-answer.show {
+            max-height: 600px;
+            padding: 25px;
+            margin-top: 20px;
+            border-left: 5px solid #003399;
+        }
+
+        /* ===== 飛行機尾翼クイズセクション ===== */
+        .quiz-section {
+            background: #001f3f;
+            /* 深い紺色 */
+            padding: 100px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #fff;
+        }
+
+        .quiz-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .quiz-intro {
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            text-align: center;
+            max-width: 700px;
+        }
+
+        .quiz-header-img {
+            max-width: 900px;
+            width: 100%;
+            border-radius: 20px;
+            margin-bottom: 50px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .quiz-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .quiz-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        .quiz-card.reveal {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .quiz-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .quiz-card-top {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            align-items: center;
+            flex: 1;
+        }
+
+        /* 尾翼イラスト作成用の共通パーツ */
+        .tail-fin-wrap {
+            width: 70px;
+            height: 90px;
+            background: #fff;
+            clip-path: polygon(35% 0, 100% 0, 100% 100%, 0 100%);
+            box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .quiz-card:hover .tail-fin-wrap {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .tail-pattern {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quiz-info {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .quiz-q-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ffcc00;
+            margin-bottom: 8px;
+        }
+
+        .quiz-hint-label {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            color: #aaa;
+        }
+
+        .quiz-hint-text {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            color: #eee;
+        }
+
+        .quiz-btn {
+            background: #ffcc00;
+            color: #001f3f;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: auto;
+            /* Pushes button to bottom */
+        }
+
+        .quiz-btn:hover {
+            background: #fff;
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.4);
+        }
+
+        .quiz-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #fff;
+            background: rgba(255, 204, 0, 0.2);
+            border-radius: 12px;
+        }
+
+        .quiz-answer.show {
+            max-height: 120px;
+            padding: 25px 10px;
+            margin-top: 15px;
+            border: 2px solid #ffcc00;
+        }
+
+        footer {
+            padding: 40px 20px;
+            text-align: center;
+            color: #666;
+            background: #fff;
+            font-size: 0.8rem;
+            font-family: Consolas, monospace;
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #003399;
+            font-weight: bold;
+            animation: bounce 2s infinite;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        /* ===== Back to TOP ボタン ===== */
+        .back-to-top {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 31, 63, 0.7);
+            backdrop-filter: blur(10px);
+            border: 2px solid #ffcc00;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #ffcc00;
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            background: #ffcc00;
+            color: #001f3f;
+        }
+
+        .back-to-top span:first-child {
+            font-size: 20px;
+            line-height: 1;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="title">Sky Flight Gallery</div>
-    <div class="airport-links">
-        <div class="airport-row">
-            <span class="airport-name">羽田空港</span>
-            <a class="airport-link" href="haneda.html">Gallery</a>
-            <a class="airport-link" href="https://www.google.com/maps?q=Haneda+Airport">MAP</a>
-            <a class="airport-link" href="https://www.google.com/search?q=Haneda+Airport+weather">今日の天気</a>
-            <a class="airport-link" href="羽田空港撮影スポット.html">撮影スポット</a>
+    <!-- Heroセクション -->
+    <div class="hero" id="home">
+        <div class="title">Sky Flight Gallery</div>
+        <div class="airport-links">
+            <div class="airport-row">
+                <span class="airport-name">羽田空港</span>
+                <a class="airport-link" href="haneda.html">Gallery</a>
+                <a class="airport-link" href="https://www.google.com/maps?q=Haneda+Airport">MAP</a>
+                <a class="airport-link" href="https://www.google.com/search?q=Haneda+Airport+weather">今日の天気</a>
+                <a class="airport-link" href="羽田空港撮影スポット.html">撮影スポット</a>
+            </div>
+            <div class="airport-row">
+                <span class="airport-name">成田空港</span>
+                <a class="airport-link" href="narita.html">Gallery</a>
+                <a class="airport-link" href="https://www.google.com/maps?q=Narita+Airport">MAP</a>
+                <a class="airport-link" href="https://www.google.com/search?q=Narita+Airport+weather">今日の天気</a>
+                <a class="airport-link" href="成田空港撮影スポット.html">撮影スポット</a>
+            </div>
+            <div class="airport-row">
+                <span class="airport-name">入間航空祭</span>
+                <a class="airport-link" href="iruma.html">Gallery</a>
+                <a class="airport-link" href="https://www.google.com/maps?q=Iruma+Air+Base">MAP</a>
+                <a class="airport-link" href="https://www.google.com/search?q=Iruma+Air+Base+weather">今日の天気</a>
+                <a class="airport-link" href="入間航空祭撮影スポット.html">撮影スポット</a>
+            </div>
+            <div class="airport-row" style="margin-top: 15px;">
+                <a class="airport-link" href="http://www.flightradar24.com/35.57,138.64/8">Flight Radar</a>
+                <a class="airport-link" href="puzzle.html" style="color: #1aa130; font-weight: 800;">少し息抜き</a>
+            </div>
         </div>
-        <div class="airport-row">
-            <span class="airport-name">成田空港</span>
-            <a class="airport-link" href="narita.html">Gallery</a>
-            <a class="airport-link" href="https://www.google.com/maps?q=Narita+Airport">MAP</a>
-            <a class="airport-link" href="https://www.google.com/search?q=Narita+Airport+weather">今日の天気</a>
-            <a class="airport-link" href="成田空港撮影スポット.html">撮影スポット</a>
+
+        <img id="main-image" src="img/imgH27.JPG" alt="メイン画像">
+        <img class="airplane" src="img/anime3.png" alt="飛行機">
+        <div class="atc-ticker">
+            <span>
+                Tokyo Tower, Japan Air 123, established on ILS runway 16R... JA123, Tokyo Tower, cleared to land runway
+                16R, wind 160 at 10 knots...
+                All Nippon 456, taxi to holding point C1 runway 16L... Skymark 789, contact Departure on 120.8, good
+                day...
+                Tokyo Ground, Peach 246 requesting taxi to gate 52...
+            </span>
         </div>
-        <div class="airport-row">
-            <span class="airport-name">入間航空祭</span>
-            <a class="airport-link" href="iruma.html">Gallery</a>
-            <a class="airport-link" href="https://www.google.com/maps?q=Iruma+Air+Base">MAP</a>
-            <a class="airport-link" href="https://www.google.com/search?q=Iruma+Air+Base+weather">今日の天気</a>
-            <a class="airport-link" href="入間航空祭撮影スポット.html">撮影スポット</a>
+        <div class="runway"></div>
+        <a href="#trivia" class="scroll-down">
+            <span>Airport Trivia</span>
+            <span>▼</span>
+        </a>
+    </div>
+
+    <!-- おもしろ豆知識セクション -->
+    <div class="trivia-section" id="trivia">
+        <h2 class="trivia-title">日本の空港・おもしろ豆知識10選</h2>
+
+        <!-- 1 -->
+        <div class="trivia-card">
+            <div class="trivia-card-content">
+                <div class="trivia-q-row">
+                    <div class="trivia-question">１．日本で一番「短い」滑走路がある空港は？</div>
+                    <button class="answer-btn">Check-in💡</button>
+                </div>
+                <div class="trivia-answer">
+                    定期便が就航している中で日本一短いのは、調布飛行場や北大東空港などの800m。大きな空港の3,000m級と比べると、驚くほどコンパクトです。
+                </div>
+            </div>
         </div>
-        <div class="airport-row" style="margin-top: 15px;">
-            <a class="airport-link" href="http://www.flightradar24.com/35.57,138.64/8">Flight Radar</a>
-            <a class="airport-link" href="puzzle.html" style="color: #1aa130; font-weight: 800;">少し息抜き</a>
+
+        <!-- 2 -->
+        <div class="trivia-card">
+            <div class="trivia-card-content">
+                <div class="trivia-q-row">
+                    <div class="trivia-question">２．関空は「世界初の完全人工島」空港</div>
+                    <button class="answer-btn">Check-in💡</button>
+                </div>
+                <div class="trivia-answer">
+                    関西国際空港は、1994年に世界で初めて**「完全に海を埋め立てた人工島」**に作られた公認空港です。現在も少しずつ沈下しており、それをジャッキアップで調整する特殊な技術が使われています。
+                </div>
+            </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="trivia-card">
+            <div class="trivia-card-content">
+                <div class="trivia-q-row">
+                    <div class="trivia-question">３．「おいしい空港」日本一は？</div>
+                    <button class="answer-btn">Check-in💡</button>
+                </div>
+                <div class="trivia-answer">
+                    羽田空港は、イギリスの調査会社から**「世界一清潔な空港」**だけでなく、空港内レストランの評価でも世界トップクラスに選ばれる常連です。もはや巨大なショッピングモールです。
+                </div>
+            </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="trivia-card">
+            <div class="trivia-card-content">
+                <div class="trivia-q-row">
+                    <div class="trivia-question">４．滑走路の番号「34」や「16」の意味</div>
+                    <button class="answer-btn">Check-in💡</button>
+                </div>
+                <div class="trivia-answer">
+                    滑走路の端に書かれた大きな数字は**方位（角度）**を表しています。北を360度とし、340度の方向を向いた滑走路は「34」と表記されます。つまり、反対側から見ると「16（180度反対）」になります。
+                </div>
+            </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="trivia-card">
+            <div class="trivia-card-content">
+                <div class="trivia-q-row">
+                    <div class="trivia-question">５．日本で唯一「国道が横切る」空港</div>
+                    <button class="answer-btn">Check-in💡</button>
+                </div>
+                <div class="trivia-answer">
+                    高知龍馬空港には、かつて滑走路を国道が横切るという珍しい光景がありました。現在はトンネル化されていますが、今でもその名残を感じることができます。
+                </div>
+            </div>
+        </div>
+
+        <!-- 6 -->
+        <div class="trivia-card">
+            <div class="trivia-card-content">
+                <div class="trivia-q-row">
+                    <div class="trivia-question">６．「誘導灯」が海の上にある理由</div>
+                    <button class="answer-btn">Check-in💡</button>
+                </div>
+                <div class="trivia-answer">
+                    羽田空港などの沿岸空港では、赤い鉄骨の橋のようなものが海へ突き出しています。これは着陸する機体に滑走路の位置を知らせる進入灯（誘導灯）。夜間に赤く光る光景は幻想的で、絶好の撮影スポットです。
+                </div>
+            </div>
+        </div>
+
+        <!-- 7 -->
+        <div class="trivia-card">
+            <div class="trivia-card-content">
+                <div class="trivia-q-row">
+                    <div class="trivia-question">７．「世界一静かな」空港の工夫</div>
+                    <button class="answer-btn">Check-in💡</button>
+                </div>
+                <div class="trivia-answer">
+                    伊丹空港（大阪国際空港）は周囲が住宅地のため、騒音規制が日本一厳しいことで有名です。夜21時以降は一切の離着陸が禁止されており、これを**「門限」**と呼びます。
+                </div>
+            </div>
+        </div>
+
+        <!-- 8 -->
+        <div class="trivia-card">
+            <div class="trivia-card-content">
+                <div class="trivia-q-row">
+                    <div class="trivia-question">８．機内食を作っているのは空港のすぐ横</div>
+                    <button class="answer-btn">Check-in💡</button>
+                </div>
+                <div class="trivia-answer">
+                    空港の敷地周辺には「機内食工場」があり、毎日数万食が作られています。できたての食事が保冷車で運ばれ、出発直前の飛行機にリフトで積み込まれます。
+                </div>
+            </div>
+        </div>
+
+        <!-- 9 -->
+        <div class="trivia-card">
+            <div class="trivia-card-content">
+                <div class="trivia-q-row">
+                    <div class="trivia-question">９．空港の消防車は「バケモノ級」のスペック</div>
+                    <button class="answer-btn">Check-in💡</button>
+                </div>
+                <div class="trivia-answer">
+                    空港専用の化学消防車は、時速100kmまで数秒で加速し、走りながら80メートル以上先まで放水できる怪物マシン。1台数億円することも珍しくありません。
+                </div>
+            </div>
+        </div>
+
+        <!-- 10 -->
+        <div class="trivia-card">
+            <div class="trivia-card-content">
+                <div class="trivia-q-row">
+                    <div class="trivia-question">１０．「セントレア」の名前の由来</div>
+                    <button class="answer-btn">Check-in💡</button>
+                </div>
+                <div class="trivia-answer">
+                    中部国際空港の愛称「セントレア（Centrair）」は、**Central（中部）とAirport（空港）**を組み合わせた造語です。一般公募で決まった、日本でも珍しい成功した愛称の例です。
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- メイン画像 -->
-    <img id="main-image" src="img/imgH27.JPG" alt="メイン画像">
+    <!-- 飛行機尾翼クイズセクション -->
+    <div class="quiz-section" id="quiz">
+        <h2 class="quiz-title">✈️ 航空会社・尾翼イラストクイズ！</h2>
+        <p class="quiz-intro">尾翼のデザインには各航空会社のこだわりが詰まっています。イラストのヒントを頼りに会社名を当ててみましょう！</p>
 
-    <!-- 飛行機 -->
-    <img class="airplane" src="img/anime3.png" alt="飛行機">
+        <div class="quiz-grid">
+            <!-- 1 JAL -->
+            <div class="quiz-card">
+                <div class="quiz-card-top">
+                    <div class="tail-fin-wrap">
+                        <div class="tail-pattern"
+                            style="background: #fff; position: relative; display: flex; align-items: center; justify-content: center;">
+                            <svg width="40" height="40" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="45" fill="#e60012" />
+                                <path d="M25,50 L75,50 M50,25 L50,75" stroke="#fff" stroke-width="2" fill="none"
+                                    opacity="0.3" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="quiz-info">
+                        <div class="quiz-q-title">第1問：鶴のマーク</div>
+                        <div class="quiz-hint-label">ヒント</div>
+                        <div class="quiz-hint-text">日本の伝統的な「鶴丸」をモチーフにしたデザイン。復活したJALの象徴です。</div>
+                    </div>
+                </div>
+                <button class="quiz-btn">正解を見る 🔍</button>
+                <div class="quiz-answer">JAL（日本航空）</div>
+            </div>
 
-    <!-- ATCテキスト（滑走路の上の空） -->
-    <div class="atc-ticker">
-        <span>
-            Tokyo Tower, Japan Air 123, established on ILS runway 16R... JA123, Tokyo Tower, cleared to land runway 16R, wind 160 at 10 knots... 
-            All Nippon 456, taxi to holding point C1 runway 16L... Skymark 789, contact Departure on 120.8, good day... 
-            Tokyo Ground, Peach 246 requesting taxi to gate 52...
-        </span>
+            <!-- 2 ANA -->
+            <div class="quiz-card">
+                <div class="quiz-card-top">
+                    <div class="tail-fin-wrap">
+                        <div class="tail-pattern" style="background: #003399; position: relative;">
+                            <div
+                                style="position: absolute; bottom: 0; left: 0; width: 100%; height: 30%; background: #6ec1ff; transform: skewY(-20deg);">
+                            </div>
+                            <div
+                                style="position: absolute; bottom: 15%; left: 0; width: 100%; height: 30%; background: #fff; transform: skewY(-20deg); opacity: 0.8;">
+                            </div>
+                            <span
+                                style="color: #fff; font-size: 14px; font-weight: bold; position: relative; z-index: 1;">ANA</span>
+                        </div>
+                    </div>
+                    <div class="quiz-info">
+                        <div class="quiz-q-title">第2問：青い2本のライン</div>
+                        <div class="quiz-hint-label">ヒント</div>
+                        <div class="quiz-hint-text">「トリトンブルー」がシンボル。尾翼の大きなANAロゴも特徴的です。</div>
+                    </div>
+                </div>
+                <button class="quiz-btn">正解を見る 🔍</button>
+                <div class="quiz-answer">ANA（全日本空輸）</div>
+            </div>
+
+            <!-- 3 Skymark -->
+            <div class="quiz-card">
+                <div class="quiz-card-top">
+                    <div class="tail-fin-wrap">
+                        <div class="tail-pattern" style="background: #001f3f; position: relative;">
+                            <svg width="40" height="40" viewBox="0 0 100 100">
+                                <polygon points="50,10 61,40 95,40 67,60 78,90 50,70 22,90 33,60 5,40 39,40"
+                                    fill="#ffcc00" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="quiz-info">
+                        <div class="quiz-q-title">第3問：紺地に黄色の星</div>
+                        <div class="quiz-hint-label">ヒント</div>
+                        <div class="quiz-hint-text">夜空に輝くシリウスをイメージ。日本の空を飛び回る大きな星マークです。</div>
+                    </div>
+                </div>
+                <button class="quiz-btn">正解を見る 🔍</button>
+                <div class="quiz-answer">スカイマーク (Skymark)</div>
+            </div>
+
+            <!-- 4 Solaseed -->
+            <div class="quiz-card">
+                <div class="quiz-card-top">
+                    <div class="tail-fin-wrap">
+                        <div class="tail-pattern" style="background: #99cc00; position: relative;">
+                            <svg width="40" height="40" viewBox="0 0 100 100">
+                                <path d="M20,40 Q50,80 80,40" fill="none" stroke="#fff" stroke-width="10"
+                                    stroke-linecap="round" />
+                                <circle cx="50" cy="30" r="5" fill="#fff" opacity="0.8" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="quiz-info">
+                        <div class="quiz-q-title">第4問：九州の黄緑色ピスタチオグリーン</div>
+                        <div class="quiz-hint-label">ヒント</div>
+                        <div class="quiz-hint-text">ピスタチオグリーンが眩しい航空会社。笑顔の種をまく、が合言葉です。</div>
+                    </div>
+                </div>
+                <button class="quiz-btn">正解を見る 🔍</button>
+                <div class="quiz-answer">ソラシドエア (Solaseed Air)</div>
+            </div>
+
+            <!-- 5 AIR DO -->
+            <div class="quiz-card">
+                <div class="quiz-card-top">
+                    <div class="tail-fin-wrap">
+                        <div class="tail-pattern" style="background: #fff; flex-direction: column; position: relative;">
+                            <div style="width: 100%; height: 50%; background: #ffcc00;"></div>
+                            <div style="width: 100%; height: 50%; background: #6ec1ff;"></div>
+                            <div
+                                style="position: absolute; background: #fff; width: 30px; height: 30px; border-radius: 50%; border: 2px solid #333; display: flex; align-items: center; justify-content: center; font-size: 10px; z-index: 2;">
+                                🐻</div>
+                        </div>
+                    </div>
+                    <div class="quiz-info">
+                        <div class="quiz-q-title">第5問：黄色と水色にシロクマ</div>
+                        <div class="quiz-hint-label">ヒント</div>
+                        <div class="quiz-hint-text">北海道の翼。マスコットの「ベア・ドゥ」がとっても可愛い会社です。</div>
+                    </div>
+                </div>
+                <button class="quiz-btn">正解を見る 🔍</button>
+                <div class="quiz-answer">AIRDO (エア・ドゥ)</div>
+            </div>
+
+            <!-- 6 Starflyer -->
+            <div class="quiz-card">
+                <div class="quiz-card-top">
+                    <div class="tail-fin-wrap">
+                        <div class="tail-pattern" style="background: #000; position: relative;">
+                            <div
+                                style="position: absolute; width: 40px; height: 1px; background: #fff; opacity: 0.5; transform: rotate(45deg);">
+                            </div>
+                            <span
+                                style="color: #fff; font-size: 20px; font-weight: 100; position: relative; z-index: 1;">S</span>
+                        </div>
+                    </div>
+                    <div class="quiz-info">
+                        <div class="quiz-q-title">第6問：漆黒のモダンデザイン</div>
+                        <div class="quiz-hint-label">ヒント</div>
+                        <div class="quiz-hint-text">国内唯一の黒い機体がトレードマーク。高級感のある北九州拠点の会社です。</div>
+                    </div>
+                </div>
+                <button class="quiz-btn">正解を見る 🔍</button>
+                <div class="quiz-answer">スターフライヤー (SFJ)</div>
+            </div>
+
+            <!-- 7 Peach -->
+            <div class="quiz-card">
+                <div class="quiz-card-top">
+                    <div class="tail-fin-wrap">
+                        <div class="tail-pattern"
+                            style="background: linear-gradient(45deg, #d40077, #ff66cc); position: relative;">
+                            <span
+                                style="color: #fff; font-style: italic; font-weight: bold; font-size: 14px;">peach</span>
+                        </div>
+                    </div>
+                    <div class="quiz-info">
+                        <div class="quiz-q-title">第7問：ピンクと紫の鮮やか色</div>
+                        <div class="quiz-hint-label">ヒント</div>
+                        <div class="quiz-hint-text">関西拠点の元気なLCC。名前の通り「桃」のようなカラーリングが特徴です。</div>
+                    </div>
+                </div>
+                <button class="quiz-btn">正解を見る 🔍</button>
+                <div class="quiz-answer">Peach (ピーチ)</div>
+            </div>
+
+            <!-- 8 Jetstar -->
+            <div class="quiz-card">
+                <div class="quiz-card-top">
+                    <div class="tail-fin-wrap">
+                        <div class="tail-pattern" style="background: #ccc; position: relative;">
+                            <svg width="40" height="40" viewBox="0 0 100 100">
+                                <polygon points="50,10 61,40 95,40 67,60 78,90 50,70 22,90 33,60 5,40 39,40"
+                                    fill="#ff6600" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="quiz-info">
+                        <div class="quiz-q-title">第8問：シルバーにオレンジの星</div>
+                        <div class="quiz-hint-label">ヒント</div>
+                        <div class="quiz-hint-text">オレンジ色の大きな星がシンボル。シルバーの機体は「空の軽自動車」をイメージ？</div>
+                    </div>
+                </div>
+                <button class="quiz-btn">正解を見る 🔍</button>
+                <div class="quiz-answer">ジェットスター (Jetstar)</div>
+            </div>
+
+            <!-- 9 FDA -->
+            <div class="quiz-card">
+                <div class="quiz-card-top">
+                    <div class="tail-fin-wrap">
+                        <div class="tail-pattern" style="background: #e60012; position: relative;">
+                            <span
+                                style="color: #fff; font-weight: 900; font-size: 24px; letter-spacing: -2px; position: relative; z-index: 1;">FDA</span>
+                        </div>
+                    </div>
+                    <div class="quiz-info">
+                        <div class="quiz-q-title">第9問：カラフルな機体ロゴ</div>
+                        <div class="quiz-hint-label">ヒント</div>
+                        <div class="quiz-hint-text">機体ごとに色が違う面白い会社。尾翼には大きな白いFDAの文字が描かれます。</div>
+                    </div>
+                </div>
+                <button class="quiz-btn">正解を見る 🔍</button>
+                <div class="quiz-answer">フジドリームエアラインズ (FDA)</div>
+            </div>
+
+            <!-- 10 AMX -->
+            <div class="quiz-card">
+                <div class="quiz-card-top">
+                    <div class="tail-fin-wrap">
+                        <div class="tail-pattern" style="background: #0066cc; position: relative;">
+                            <svg width="50" height="50" viewBox="0 0 100 100">
+                                <path d="M20,60 Q50,20 80,60" fill="none" stroke="#fff" stroke-width="5" />
+                                <circle cx="40" cy="45" r="3" fill="#fff" />
+                                <text x="30" y="80" fill="#fff" font-size="12" font-weight="bold">AMX</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="quiz-info">
+                        <div class="quiz-q-title">第10問：海を泳ぐイルカ</div>
+                        <div class="quiz-hint-label">ヒント</div>
+                        <div class="quiz-hint-text">天草拠点の小さな会社。可愛い親子イルカ「みぞか号」がデザインされています。</div>
+                    </div>
+                </div>
+                <button class="quiz-btn">正解を見る 🔍</button>
+                <div class="quiz-answer">天草エアライン (AMX)</div>
+            </div>
+        </div>
     </div>
 
-    <!-- 滑走路 -->
-    <div class="runway"></div>
+    <a id="topBtn" class="back-to-top">
+        <span>▲</span>
+        <span>TOP</span>
+    </a>
 
     <footer>
         SITE: HANEDA / NARITA / IRUMA PHOTO ARCHIVE<br>
@@ -272,10 +983,11 @@
         // 17時以降に背景画像とタイトル色を変更
         const hour = new Date().getHours();
         if (hour >= 17) {
-            document.body.style.backgroundImage = "url('img/img200.JPG'), linear-gradient(to bottom, #6ec1ff, #87ceeb, #bfe9ff)";
-            document.querySelector('.title').style.color = "#fffaf0"; // 乳白色に変える
+            document.querySelector('.hero').style.backgroundImage = "url('img/img200.JPG'), linear-gradient(to bottom, #6ec1ff, #87ceeb, #bfe9ff)";
+            document.querySelector('.title').style.color = "#fffaf0";
         }
 
+        // 外側のリンクを別窓で開く
         document.querySelectorAll('.airport-link').forEach(link => {
             const href = link.getAttribute('href');
             if (href && (href.includes('google.com/maps') || href.includes('google.com/search') || href.includes('flightradar24.com'))) {
@@ -284,6 +996,56 @@
                     window.open(href, '_blank', 'width=800,height=600,resizable=yes,scrollbars=yes');
                 });
             }
+        });
+
+        // スクロール連動アニメーション (Intersection Observer)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.trivia-card, .quiz-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // 回答の表示/非表示切り替え
+        document.querySelectorAll('.answer-btn, .quiz-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // セレクタをより堅牢に（親カードを取得してからその中の回答クラスを探す）
+                const container = btn.closest('.trivia-card-content, .quiz-card');
+                const answer = container.querySelector('.trivia-answer, .quiz-answer');
+
+                if (!answer) return; // 念のため
+
+                const isShow = answer.classList.toggle('show');
+                const isQuiz = btn.classList.contains('quiz-btn');
+
+                if (isQuiz) {
+                    btn.textContent = isShow ? '閉じる 👆' : '正解を見る 🔍';
+                } else {
+                    btn.textContent = isShow ? '閉じる 👆' : '答えは？ 💡';
+                }
+            });
+        });
+
+        // Back to TOP ボタンの制御
+        const topBtn = document.getElementById('topBtn');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                topBtn.classList.add('visible');
+            } else {
+                topBtn.classList.remove('visible');
+            }
+        });
+
+        topBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
     </script>
 
