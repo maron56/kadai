@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>羽田空港 - Sky Flight Gallery</title>
+    <link rel="icon" href="img/IMG_2.PNG">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;700&display=swap"
@@ -87,6 +88,23 @@
             background: #0056b3;
         }
 
+        /* ロゴ */
+        .site-logo {
+            position: fixed;
+            top: 15px;
+            right: 20px;
+            z-index: 2000;
+            height: 50px;
+            width: auto;
+            opacity: 0.9;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .site-logo.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
         /* モーダルスタイル */
         .modal {
             display: none;
@@ -137,6 +155,7 @@
 </head>
 
 <body>
+    <img src="img/IMG_1.PNG" alt="ロゴ" class="site-logo">
     <h1>
         <span class="hnd-title">Ｈ Ｎ Ｄ</span>
         <small class="hnd-sub">TOKYO HANEDA AIRPORT</small>
@@ -187,6 +206,15 @@
                 closeModal();
             }
         }
+
+        // ロゴ：スクロール中は非表示
+        const siteLogo = document.querySelector('.site-logo');
+        let scrollTimer;
+        window.addEventListener('scroll', () => {
+            siteLogo.classList.add('hidden');
+            clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(() => siteLogo.classList.remove('hidden'), 300);
+        });
     </script>
 </body>
 

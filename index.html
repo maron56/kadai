@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>飛行機写真ギャラリー</title>
+    <link rel="icon" href="img/IMG_2.PNG">
 
     <style>
         /* ===== 全体設定 ===== */
@@ -545,10 +546,29 @@
             font-size: 20px;
             line-height: 1;
         }
+
+        /* ===== ロゴ ===== */
+        .site-logo {
+            position: fixed;
+            top: 15px;
+            right: 20px;
+            z-index: 2000;
+            height: 50px;
+            width: auto;
+            opacity: 0.9;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .site-logo.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
     </style>
 </head>
 
 <body>
+
+    <img src="img/IMG_1.PNG" alt="ロゴ" class="site-logo">
 
     <!-- Heroセクション -->
     <div class="hero" id="home">
@@ -1046,6 +1066,17 @@
                 top: 0,
                 behavior: 'smooth'
             });
+        });
+
+        // ロゴ：スクロール中は非表示
+        const siteLogo = document.querySelector('.site-logo');
+        let scrollTimer;
+        window.addEventListener('scroll', () => {
+            siteLogo.classList.add('hidden');
+            clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(() => {
+                siteLogo.classList.remove('hidden');
+            }, 300);
         });
     </script>
 
