@@ -50,7 +50,7 @@
         /* ===== 滑走路 ===== */
         .runway {
             position: absolute;
-            bottom: 75px;
+            bottom: 30px;
             width: 100%;
             height: 140px;
             background: #555;
@@ -84,7 +84,7 @@
         /* ===== 飛行機 ===== */
         .airplane {
             position: absolute;
-            bottom: 95px;
+            bottom: 50px;
             left: 0;
             width: 120px;
             z-index: 10;
@@ -109,9 +109,9 @@
         .title {
             position: absolute;
             top: 20px;
-            left: 200px;
-            right: 0;
-            width: auto;
+            left: auto;
+            right: 70px;
+            width: 800px;
             text-align: center;
             color: #003399;
             font-size: 2em;
@@ -121,18 +121,18 @@
         /* ===== サブページリンク ===== */
         .airport-links {
             position: absolute;
-            top: 160px;
+            top: 100px;
             right: 70px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 6px;
             z-index: 10;
         }
 
         .airport-row {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
         }
 
         .airport-row a,
@@ -140,15 +140,16 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 10px 16px;
+            padding: 8px 10px;
             background: rgba(255, 255, 255, 0.9);
             color: #333;
             text-decoration: none;
             border-radius: 10px;
             border: 2px solid rgba(0, 0, 0, 0.12);
             font-weight: 600;
+            font-size: 0.85rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-            min-width: 100px;
+            min-width: 72px;
             transition: all 0.3s;
         }
 
@@ -156,6 +157,9 @@
             background: rgba(0, 0, 0, 0.45);
             color: #fff;
             border-color: rgba(255, 255, 255, 0.3);
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+            min-width: 100px;
         }
 
         .airport-row a:hover {
@@ -163,10 +167,36 @@
             background: #fff;
         }
 
+        .flight-info-link {
+            background: rgba(255, 255, 255, 0.9) !important;
+            color: #ff6600 !important;
+            border: 2px solid rgba(0, 0, 0, 0.12) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+            font-size: 0.85rem !important;
+            font-weight: 800 !important;
+            cursor: pointer;
+            text-decoration: none !important;
+            text-shadow: none;
+            animation: blink 2.4s ease-in-out infinite;
+        }
+
+        .flight-info-link:hover {
+            background: #fff !important;
+            color: #ff6600 !important;
+            transform: translateY(-2px) !important;
+            animation: none;
+            opacity: 1;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0.25; }
+        }
+
         /* ===== ATC（無線）テキスト ===== */
         .atc-ticker {
             position: absolute;
-            bottom: 220px;
+            bottom: 175px;
             width: 100%;
             white-space: nowrap;
             overflow: hidden;
@@ -286,6 +316,30 @@
             padding: 25px;
             margin-top: 20px;
             border-left: 5px solid #003399;
+        }
+
+        /* ===== 豆知識リフレッシュボタン ===== */
+        #trivia-refresh-btn {
+            margin-top: 20px;
+            padding: 14px 40px;
+            background: linear-gradient(135deg, #003399, #0056b3);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 51, 153, 0.25);
+            transition: all 0.3s;
+        }
+
+        #trivia-refresh-btn:hover {
+            transform: translateY(-3px) scale(1.04);
+            box-shadow: 0 10px 28px rgba(0, 51, 153, 0.35);
+        }
+
+        #trivia-refresh-btn:active {
+            transform: scale(0.97);
         }
 
         /* ===== 飛行機尾翼クイズセクション ===== */
@@ -472,7 +526,7 @@
 
         .scroll-down {
             position: absolute;
-            bottom: 30px;
+            bottom: 5px;
             left: 50%;
             transform: translateX(-50%);
             color: #003399;
@@ -504,7 +558,85 @@
             }
         }
 
-        /* ===== Back to TOP ボタン ===== */
+        /* ===== ちょっと息抜きセクション ===== */
+        .breather-section {
+            margin-top: 18px;
+            margin-left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-self: flex-start;
+        }
+
+        .breather-label {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            padding: 4px 12px;
+            background: rgba(0, 0, 0, 0.45);
+            border-radius: 6px;
+            display: inline-block;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+        }
+
+        .breather-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        /* ===== 六角形ボタン ===== */
+        .hex-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 110px;
+            height: 52px;
+            background: rgba(255, 255, 255, 0.92);
+            color: #333;
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-decoration: none;
+            cursor: pointer;
+            clip-path: polygon(8% 0%, 92% 0%, 100% 50%, 92% 100%, 8% 100%, 0% 50%);
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .hex-btn:hover {
+            transform: translateY(-3px) scale(1.06);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .hex-btn.trivia {
+            background: rgba(0, 51, 153, 0.85);
+            color: #fff;
+        }
+
+        .hex-btn.trivia:hover {
+            background: #003399;
+        }
+
+        .hex-btn.quiz {
+            background: rgba(0, 31, 63, 0.85);
+            color: #ffcc00;
+        }
+
+        .hex-btn.quiz:hover {
+            background: #001f3f;
+        }
+
+        .hex-btn.puzzle {
+            background: rgba(26, 161, 48, 0.85);
+            color: #fff;
+        }
+
+        .hex-btn.puzzle:hover {
+            background: #1aa130;
+        }
         .back-to-top {
             position: fixed;
             bottom: 40px;
@@ -580,6 +712,7 @@
                 <a class="airport-link" href="https://www.google.com/maps?q=Haneda+Airport">MAP</a>
                 <a class="airport-link" href="https://www.google.com/search?q=Haneda+Airport+weather">今日の天気</a>
                 <a class="airport-link" href="羽田空港撮影スポット.html">撮影スポット</a>
+                <a class="airport-link flight-info-link" href="https://flightaware.com/live/airport/RJTT">✈ Flight Info</a>
             </div>
             <div class="airport-row">
                 <span class="airport-name">成田空港</span>
@@ -587,6 +720,7 @@
                 <a class="airport-link" href="https://www.google.com/maps?q=Narita+Airport">MAP</a>
                 <a class="airport-link" href="https://www.google.com/search?q=Narita+Airport+weather">今日の天気</a>
                 <a class="airport-link" href="成田空港撮影スポット.html">撮影スポット</a>
+                <a class="airport-link flight-info-link" href="https://flightaware.com/live/airport/RJAA">✈ Flight Info</a>
             </div>
             <div class="airport-row">
                 <span class="airport-name">入間航空祭</span>
@@ -597,7 +731,14 @@
             </div>
             <div class="airport-row" style="margin-top: 15px;">
                 <a class="airport-link" href="http://www.flightradar24.com/35.57,138.64/8">Flight Radar</a>
-                <a class="airport-link" href="puzzle.html" style="color: #1aa130; font-weight: 800;">少し息抜き</a>
+            </div>
+            <div class="breather-section">
+                <span class="breather-label">★ちょっとお遊びする？</span>
+                <div class="breather-row">
+                    <a class="hex-btn trivia" href="#trivia">💡 豆知識</a>
+                    <a class="hex-btn quiz" href="#quiz">🎯 クイズ</a>
+                    <a class="hex-btn puzzle" href="puzzle.html">🧩 パズル</a>
+                </div>
             </div>
         </div>
 
@@ -614,144 +755,15 @@
         </div>
         <div class="runway"></div>
         <a href="#trivia" class="scroll-down">
-            <span>Airport Trivia</span>
             <span>▼</span>
         </a>
     </div>
 
     <!-- おもしろ豆知識セクション -->
     <div class="trivia-section" id="trivia">
-        <h2 class="trivia-title">日本の空港・おもしろ豆知識10選</h2>
-
-        <!-- 1 -->
-        <div class="trivia-card">
-            <div class="trivia-card-content">
-                <div class="trivia-q-row">
-                    <div class="trivia-question">１．日本で一番「短い」滑走路がある空港は？</div>
-                    <button class="answer-btn">Check-in💡</button>
-                </div>
-                <div class="trivia-answer">
-                    定期便が就航している中で日本一短いのは、調布飛行場や北大東空港などの800m。大きな空港の3,000m級と比べると、驚くほどコンパクトです。
-                </div>
-            </div>
-        </div>
-
-        <!-- 2 -->
-        <div class="trivia-card">
-            <div class="trivia-card-content">
-                <div class="trivia-q-row">
-                    <div class="trivia-question">２．関空は「世界初の完全人工島」空港</div>
-                    <button class="answer-btn">Check-in💡</button>
-                </div>
-                <div class="trivia-answer">
-                    関西国際空港は、1994年に世界で初めて**「完全に海を埋め立てた人工島」**に作られた公認空港です。現在も少しずつ沈下しており、それをジャッキアップで調整する特殊な技術が使われています。
-                </div>
-            </div>
-        </div>
-
-        <!-- 3 -->
-        <div class="trivia-card">
-            <div class="trivia-card-content">
-                <div class="trivia-q-row">
-                    <div class="trivia-question">３．「おいしい空港」日本一は？</div>
-                    <button class="answer-btn">Check-in💡</button>
-                </div>
-                <div class="trivia-answer">
-                    羽田空港は、イギリスの調査会社から**「世界一清潔な空港」**だけでなく、空港内レストランの評価でも世界トップクラスに選ばれる常連です。もはや巨大なショッピングモールです。
-                </div>
-            </div>
-        </div>
-
-        <!-- 4 -->
-        <div class="trivia-card">
-            <div class="trivia-card-content">
-                <div class="trivia-q-row">
-                    <div class="trivia-question">４．滑走路の番号「34」や「16」の意味</div>
-                    <button class="answer-btn">Check-in💡</button>
-                </div>
-                <div class="trivia-answer">
-                    滑走路の端に書かれた大きな数字は**方位（角度）**を表しています。北を360度とし、340度の方向を向いた滑走路は「34」と表記されます。つまり、反対側から見ると「16（180度反対）」になります。
-                </div>
-            </div>
-        </div>
-
-        <!-- 5 -->
-        <div class="trivia-card">
-            <div class="trivia-card-content">
-                <div class="trivia-q-row">
-                    <div class="trivia-question">５．日本で唯一「国道が横切る」空港</div>
-                    <button class="answer-btn">Check-in💡</button>
-                </div>
-                <div class="trivia-answer">
-                    高知龍馬空港には、かつて滑走路を国道が横切るという珍しい光景がありました。現在はトンネル化されていますが、今でもその名残を感じることができます。
-                </div>
-            </div>
-        </div>
-
-        <!-- 6 -->
-        <div class="trivia-card">
-            <div class="trivia-card-content">
-                <div class="trivia-q-row">
-                    <div class="trivia-question">６．「誘導灯」が海の上にある理由</div>
-                    <button class="answer-btn">Check-in💡</button>
-                </div>
-                <div class="trivia-answer">
-                    羽田空港などの沿岸空港では、赤い鉄骨の橋のようなものが海へ突き出しています。これは着陸する機体に滑走路の位置を知らせる進入灯（誘導灯）。夜間に赤く光る光景は幻想的で、絶好の撮影スポットです。
-                </div>
-            </div>
-        </div>
-
-        <!-- 7 -->
-        <div class="trivia-card">
-            <div class="trivia-card-content">
-                <div class="trivia-q-row">
-                    <div class="trivia-question">７．「世界一静かな」空港の工夫</div>
-                    <button class="answer-btn">Check-in💡</button>
-                </div>
-                <div class="trivia-answer">
-                    伊丹空港（大阪国際空港）は周囲が住宅地のため、騒音規制が日本一厳しいことで有名です。夜21時以降は一切の離着陸が禁止されており、これを**「門限」**と呼びます。
-                </div>
-            </div>
-        </div>
-
-        <!-- 8 -->
-        <div class="trivia-card">
-            <div class="trivia-card-content">
-                <div class="trivia-q-row">
-                    <div class="trivia-question">８．機内食を作っているのは空港のすぐ横</div>
-                    <button class="answer-btn">Check-in💡</button>
-                </div>
-                <div class="trivia-answer">
-                    空港の敷地周辺には「機内食工場」があり、毎日数万食が作られています。できたての食事が保冷車で運ばれ、出発直前の飛行機にリフトで積み込まれます。
-                </div>
-            </div>
-        </div>
-
-        <!-- 9 -->
-        <div class="trivia-card">
-            <div class="trivia-card-content">
-                <div class="trivia-q-row">
-                    <div class="trivia-question">９．空港の消防車は「バケモノ級」のスペック</div>
-                    <button class="answer-btn">Check-in💡</button>
-                </div>
-                <div class="trivia-answer">
-                    空港専用の化学消防車は、時速100kmまで数秒で加速し、走りながら80メートル以上先まで放水できる怪物マシン。1台数億円することも珍しくありません。
-                </div>
-            </div>
-        </div>
-
-        <!-- 10 -->
-        <div class="trivia-card">
-            <div class="trivia-card-content">
-                <div class="trivia-q-row">
-                    <div class="trivia-question">１０．「セントレア」の名前の由来</div>
-                    <button class="answer-btn">Check-in💡</button>
-                </div>
-                <div class="trivia-answer">
-                    中部国際空港の愛称「セントレア（Centrair）」は、**Central（中部）とAirport（空港）**を組み合わせた造語です。一般公募で決まった、日本でも珍しい成功した愛称の例です。
-                </div>
-            </div>
-        </div>
+        <h2 class="trivia-title">日本の空港・おもしろ豆知識</h2>
+        <div id="trivia-cards"></div>
+        <button id="trivia-refresh-btn" onclick="refreshTrivia()">🔄 別の問題を見る</button>
     </div>
 
     <!-- 飛行機尾翼クイズセクション -->
@@ -992,11 +1004,227 @@
     </footer>
 
     <script>
+        // ===== 豆知識データ（30問）=====
+        const triviaAll = [
+            {
+                q: '日本で一番「短い」定期便滑走路がある空港は？',
+                a: '定期便が就航している中で日本一短いのは北大東空港の800m滑走路。大型機が使う3,000m級と比べると驚くほどコンパクトで、着陸時のブレーキングが非常にシビアです。'
+            },
+            {
+                q: '関空は「世界初の完全人工島」空港',
+                a: '関西国際空港は1994年に世界で初めて完全に海を埋め立てた人工島に作られた空港です。現在も少しずつ沈下しており、建物をジャッキアップで調整する特殊な技術が使われています。'
+            },
+            {
+                q: '羽田空港が「世界一清潔」と言われる理由',
+                a: '羽田空港はイギリスの調査会社スカイトラックスから「世界一清潔な空港」に複数回選ばれています。清掃スタッフが24時間体制で稼働し、トイレは1時間に1回以上の点検が義務付けられています。'
+            },
+            {
+                q: '滑走路の番号「34」や「16」が意味するもの',
+                a: '滑走路の番号は方位（磁方位）を10で割った値です。340度方向を向いた滑走路は「34」、その反対側は180度差の「16」になります。羽田のRWY34Rは北北西を向いています。'
+            },
+            {
+                q: '日本で唯一「国道が横切っていた」空港はどこ？',
+                a: '高知龍馬空港には、かつて滑走路を国道32号が横切るという世界的にも珍しい光景がありました。現在は国道がトンネル化されていますが、その名残の構造物を今でも見ることができます。'
+            },
+            {
+                q: '海の上に突き出た「赤い橋」の正体は？',
+                a: '羽田空港などの沿岸空港で海へ突き出している赤い鉄骨構造物は「進入灯（ALSF）」です。着陸機にグライドパスと滑走路の位置を視覚的に知らせる重要な保安施設で、夜間は幻想的に赤く光ります。'
+            },
+            {
+                q: '伊丹空港に「門限」がある理由',
+                a: '大阪国際空港（伊丹）は周囲が住宅密集地のため、夜21時以降の離着陸が全面禁止されています。この「門限」は日本一厳しい騒音規制で、違反した航空会社には着陸料の割増しペナルティが課されます。'
+            },
+            {
+                q: '機内食はどこで作られている？',
+                a: '機内食は空港敷地内または隣接地にある「機内食工場（ケータリングセンター）」で製造されます。羽田ではANAとJALがそれぞれ巨大な工場を持ち、毎日合計数万食を生産。専用リフトトラックで機体に積み込まれます。'
+            },
+            {
+                q: '空港の化学消防車が持つ驚異のスペック',
+                a: '空港専用の化学消防車（ARFF車）は0〜100km/hを約25秒で加速し、毎分数千リットルの泡消火剤を80m以上先まで放射できます。1台の価格は2〜3億円以上で、羽田には十数台が常時待機しています。'
+            },
+            {
+                q: '「セントレア」という愛称の由来',
+                a: '中部国際空港の愛称「セントレア（Centrair）」はCentral（中部）とAirport（空港）を合わせた造語です。2001年の一般公募で選ばれ、約3万件の応募の中から採用されました。空港の愛称公募としては日本でも成功例として知られています。'
+            },
+            {
+                q: '羽田空港のD滑走路が「斜張橋」になっている理由',
+                a: 'D滑走路（RWY05/23）は多摩川河口をまたぐため、川の流れを妨げないよう桟橋構造と人工島を組み合わせた世界初の「桟橋・人工島複合型」滑走路として2010年に開業しました。橋脚部分は船舶航行のため高さが確保されています。'
+            },
+            {
+                q: '成田空港の「第3ターミナル」が格安な理由',
+                a: '成田空港第3ターミナルはLCC専用として2015年に開業。建設コストを抑えるため搭乗橋（ボーディングブリッジ）を設けず、徒歩で駐機場まで歩く設計です。ターミナル間の移動通路には陸上競技トラックのような距離表示があります。'
+            },
+            {
+                q: '「スポット」と「ゲート」の違いは？',
+                a: 'スポット（エプロン）は飛行機が駐機する場所全体を指し、ゲートはそのうち旅客が搭乗橋を通じて乗降できる場所です。搭乗橋のないスポットはバスで移動する「沖止め」となり、LCCや貨物機によく使われます。'
+            },
+            {
+                q: '管制官が使う「スコーク7700」とは？',
+                a: 'スコーク7700はトランスポンダーに設定する緊急コードです。パイロットがこのコードを入力すると管制レーダー画面に緊急アラートが表示され、周辺空域の全管制官に即座に通知されます。7600は無線故障、7500はハイジャックを意味します。'
+            },
+            {
+                q: '那覇空港が「自衛隊と共用」している理由',
+                a: '那覇空港は民間の那覇空港と航空自衛隊那覇基地が同一の滑走路を共用しています。民間機と戦闘機が同じ滑走路を使う珍しい形態で、管制は自衛隊と国土交通省が連携して行っています。'
+            },
+            {
+                q: '「NOTAM」とはパイロットが必ず確認する情報',
+                a: 'NOTAM（ノータム）はNotice to Air Missionsの略で、滑走路閉鎖・航行援助施設の停止・花火大会による空域制限など、飛行に影響するあらゆる臨時情報を集約した公式通知です。パイロットはフライト前に必ず確認が義務付けられています。'
+            },
+            {
+                q: '羽田空港の「エプロン」の広さはどのくらい？',
+                a: '羽田空港のエプロン（駐機エリア）は約100万平方メートル以上あり、同時に100機以上の航空機が駐機できます。夜間には翌朝の出発に備えた整備作業が一斉に行われ、まるで巨大な工場のような光景になります。'
+            },
+            {
+                q: '「ILS」がないと飛行機は着陸できない？',
+                a: 'ILS（計器着陸装置）は霧や低視程時に滑走路への正確な進入を誘導する電波システムです。カテゴリーIIIbのILSがあれば視程75m以下でも着陸可能。羽田や成田はこの最高カテゴリーを備えています。'
+            },
+            {
+                q: '空港の「エアサイド」と「ランドサイド」の違い',
+                a: 'セキュリティ検査を通過した先が「エアサイド」（制限区域）、手前が「ランドサイド」（一般区域）です。エアサイドに入るには保安検査が必要で、空港職員でも専用IDカードがなければ立ち入れません。'
+            },
+            {
+                q: '「グランドハンドリング」という仕事の内容',
+                a: 'グランドハンドリング（グラハン）は地上支援業務の総称で、手荷物の積み降ろし・給油・機体牽引・機内清掃・ケータリング搭載など多岐にわたります。1便の折り返しに関わるスタッフは多い時で50人以上になることもあります。'
+            },
+            {
+                q: '新千歳空港の「地下」に何がある？',
+                a: '新千歳空港のターミナルビル地下には温泉施設「新千歳空港温泉」があります。24時間営業で仮眠室も完備しており、乗り継ぎ待ちや欠航時に利用できる全国でも珍しい空港温泉です。'
+            },
+            {
+                q: '「ウィンドソック」が空港に必ずある理由',
+                a: 'ウィンドソック（吹き流し）は風向きと風速を視覚的に示す装置です。完全に水平に伸びている状態が風速約15ノット（約28km/h）以上を示します。パイロットは着陸前にこれを確認して最終的な風の状態を把握します。'
+            },
+            {
+                q: '成田空港の「第2滑走路」が短い歴史的理由',
+                a: '成田空港のB滑走路（RWY16R/34L）は本来4,000mの計画でしたが、用地取得問題により2,500mしか建設できませんでした。現在も延伸計画が続いており、大型機の一部は重量制限を受けることがあります。'
+            },
+            {
+                q: '「プッシュバック」とはどんな作業？',
+                a: 'プッシュバックはトーイングトラクターで飛行機をゲートから後退させる作業です。飛行機はエンジンを逆噴射して後退することができないため、必ずこの作業が必要です。パイロットとグラハンスタッフがインターフォンで連絡を取りながら行います。'
+            },
+            {
+                q: '「タキシング」中に飛行機が自力で曲がれる仕組み',
+                a: '飛行機は前輪（ノーズギア）をステアリングで操作して地上を走行します。大型機では後輪（メインギア）も連動して操舵できるものがあります。またエンジンの推力差を使って旋回することも可能で、狭いスポットへの誘導に活用されます。'
+            },
+            {
+                q: '「バードストライク」が最も多い空港はどこ？',
+                a: '日本では成田・羽田・新千歳などの大規模空港でバードストライク（鳥衝突）の報告件数が多い傾向があります。空港では猛禽類の放し飼い・爆音装置・草丈管理など多彩な鳥害対策が実施されており、専任の「バードパトロール」スタッフが常駐しています。'
+            },
+            {
+                q: '「スポットナンバー」はなぜ飛び番号が多い？',
+                a: 'スポット番号が連番でなく飛び番号になっているのは、将来の増設スペースを確保するためや、ターミナル増築時に番号体系を維持するためです。また旧施設の番号を引き継いだ歴史的経緯から不規則になっているケースもあります。'
+            },
+            {
+                q: '「ランプコントロール」と「タワー」の管制の違い',
+                a: 'タワー（飛行場管制）は滑走路と最終進入経路を管轄し、ランプコントロール（エプロン管制）はスポット周辺のエプロン内の誘導を担当します。大規模空港ではさらにグランド（地上走行管制）が加わり、3者が連携して安全を確保しています。'
+            },
+            {
+                q: '「チョックス・アウェイ」の意味',
+                a: 'チョック（Chock）は駐機中に車輪の前後に挟む楔形の車止めです。「チョックス・アウェイ」はこれを外す合図で、飛行機が動き出せる状態になったことを意味します。ブロックタイム（飛行時間の計算基準）はこの瞬間から計測が始まります。'
+            },
+            {
+                q: '「ゴーアラウンド（着陸復行）」が起きる主な理由',
+                a: 'ゴーアラウンドは着陸を中止して再上昇することです。主な原因は滑走路上の先行機が離脱していない・強風や視程不良・機体の姿勢が安定しないなどです。安全のための正常な操作であり、パイロットは躊躇なく実施するよう訓練されています。'
+            },
+            {
+                q: '日本最南端・最北端の空港はどこ？',
+                a: '日本最南端の定期便空港は沖縄県の波照間空港（ただし定期便は休止中）、定期便が運航中では南ぬ島石垣空港です。最北端は北海道の稚内空港。両空港の直線距離は約3,000kmにも及びます。'
+            }
+        ];
+
+        // ランダムに10問選んでカードを生成
+        let lastSelected = [];
+
+        function buildTriviaCards() {
+            // 直前と重複しないよう除外してシャッフル
+            const pool = triviaAll.filter(item => !lastSelected.includes(item));
+            // 残りが10問未満なら全リセット
+            const source = pool.length >= 10 ? pool : [...triviaAll];
+            const shuffled = [...source].sort(() => Math.random() - 0.5);
+            const selected = shuffled.slice(0, 10);
+            lastSelected = selected;
+
+            const container = document.getElementById('trivia-cards');
+
+            // フェードアウト → 差し替え → フェードイン
+            container.style.transition = 'opacity 0.3s';
+            container.style.opacity = '0';
+
+            setTimeout(() => {
+                container.innerHTML = selected.map((item, i) => `
+                    <div class="trivia-card">
+                        <div class="trivia-card-content">
+                            <div class="trivia-q-row">
+                                <div class="trivia-question">${i + 1}．${item.q}</div>
+                                <button class="answer-btn">Check-in💡</button>
+                            </div>
+                            <div class="trivia-answer">${item.a}</div>
+                        </div>
+                    </div>
+                `).join('');
+
+                container.querySelectorAll('.trivia-card').forEach(card => observer.observe(card));
+                container.querySelectorAll('.answer-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const answer = btn.closest('.trivia-card-content').querySelector('.trivia-answer');
+                        const isShow = answer.classList.toggle('show');
+                        btn.textContent = isShow ? '閉じる 👆' : 'Check-in💡';
+                    });
+                });
+
+                container.style.opacity = '1';
+            }, 300);
+        }
+
+        function refreshTrivia() {
+            buildTriviaCards();
+            // セクション先頭にスムーズスクロール
+            document.getElementById('trivia').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
         const mainImage = document.getElementById('main-image');
-        const imageFiles = ['img/imgH27.JPG', 'img/imgI_11.JPG', 'img/imgI_16.JPG', 'img/imgI_21.JPG', 'img/imgI_25.JPG'];
+
+        // imgフォルダーの全写真ファイル（ロゴ・アニメ・動画・クイズ用を除く）
+        const allImageFiles = [
+            'img/img100.jpg',
+            'img/img200.jpeg',
+            'img/img200.JPG',
+            'img/imgH01.JPG', 'img/imgH02.JPG', 'img/imgH03.JPG', 'img/imgH04.JPG',
+            'img/imgH06.JPG', 'img/imgH07.JPG', 'img/imgH27.JPG',
+            'img/imgI_10.JPG', 'img/imgI_11.JPG', 'img/imgI_12.JPG', 'img/imgI_13.JPG',
+            'img/imgI_14.JPG', 'img/imgI_15.JPG', 'img/imgI_16.JPG', 'img/imgI_17.JPG',
+            'img/imgI_18.JPG', 'img/imgI_19.JPG', 'img/imgI_20.JPG', 'img/imgI_21.JPG',
+            'img/imgI_22.JPG', 'img/imgI_23.JPG', 'img/imgI_24.JPG', 'img/imgI_25.JPG',
+            'img/imgI_26.JPG',
+            'img/imgN01.JPG', 'img/imgN02.JPG', 'img/imgN03.JPG', 'img/imgN04.JPG',
+            'img/imgN05.JPG', 'img/imgN06.JPG', 'img/imgN07.JPG', 'img/imgN08.JPG',
+            'img/imgN09.JPG', 'img/imgN11.JPG', 'img/imgN12.JPG', 'img/imgN13.JPG',
+            'img/imgN14.JPG', 'img/imgN15.JPG',
+            'img/xuewK1R5RTC3YSVuqpCLUA(1).jpg'
+        ];
+
+        // Fisher-Yatesシャッフルでランダムに並べ替え、先頭5枚を選ぶ
+        function pickRandom5() {
+            const shuffled = [...allImageFiles];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled.slice(0, 5);
+        }
+
+        let imageFiles = pickRandom5();
         let currentIndex = 0;
+
+        // ページ読み込み時に最初の1枚を設定
+        mainImage.src = imageFiles[currentIndex];
+
         setInterval(() => {
-            currentIndex = (currentIndex + 1) % imageFiles.length;
+            currentIndex++;
+            // 5枚使い切ったら新たにランダム5枚を選び直す
+            if (currentIndex >= imageFiles.length) {
+                imageFiles = pickRandom5();
+                currentIndex = 0;
+            }
             mainImage.src = imageFiles[currentIndex];
         }, 2000);
 
@@ -1010,7 +1238,7 @@
         // 外側のリンクを別窓で開く
         document.querySelectorAll('.airport-link').forEach(link => {
             const href = link.getAttribute('href');
-            if (href && (href.includes('google.com/maps') || href.includes('google.com/search') || href.includes('flightradar24.com'))) {
+            if (href && (href.includes('google.com/maps') || href.includes('google.com/search') || href.includes('flightradar24.com') || href.includes('flightaware.com'))) {
                 link.addEventListener('click', event => {
                     event.preventDefault();
                     window.open(href, '_blank', 'width=800,height=600,resizable=yes,scrollbars=yes');
@@ -1027,27 +1255,19 @@
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.trivia-card, .quiz-card').forEach(card => {
+        document.querySelectorAll('.quiz-card').forEach(card => {
             observer.observe(card);
         });
 
-        // 回答の表示/非表示切り替え
-        document.querySelectorAll('.answer-btn, .quiz-btn').forEach(btn => {
+        // 豆知識カードを動的生成（observerより後に呼ぶ）
+        buildTriviaCards();
+
+        // 尾翼クイズの回答ボタン
+        document.querySelectorAll('.quiz-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                // セレクタをより堅牢に（親カードを取得してからその中の回答クラスを探す）
-                const container = btn.closest('.trivia-card-content, .quiz-card');
-                const answer = container.querySelector('.trivia-answer, .quiz-answer');
-
-                if (!answer) return; // 念のため
-
+                const answer = btn.closest('.quiz-card').querySelector('.quiz-answer');
                 const isShow = answer.classList.toggle('show');
-                const isQuiz = btn.classList.contains('quiz-btn');
-
-                if (isQuiz) {
-                    btn.textContent = isShow ? '閉じる 👆' : '正解を見る 🔍';
-                } else {
-                    btn.textContent = isShow ? '閉じる 👆' : '答えは？ 💡';
-                }
+                btn.textContent = isShow ? '閉じる 👆' : '正解を見る 🔍';
             });
         });
 

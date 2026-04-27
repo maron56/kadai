@@ -192,6 +192,76 @@
             transform: scale(0.95);
         }
 
+        /* 降参確認モーダル */
+        #giveup-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        #giveup-modal.show {
+            display: flex;
+        }
+
+        .giveup-dialog {
+            background: #fff;
+            border-radius: 16px;
+            padding: 36px 40px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .giveup-dialog p {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin: 0 0 28px 0;
+        }
+
+        .giveup-dialog-btns {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .giveup-dialog-btns button {
+            padding: 12px 32px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        #giveup-yes {
+            background: #e74c3c;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(231,76,60,0.35);
+        }
+
+        #giveup-yes:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        #giveup-no {
+            background: #f0f0f0;
+            color: #555;
+        }
+
+        #giveup-no:hover {
+            background: #ddd;
+            transform: translateY(-2px);
+        }
+
         /* 祝賀オーバーレイ */
         #congrats-overlay {
             position: fixed;
@@ -316,6 +386,17 @@
                 <img id="reference-image" src="" alt="Complete Puzzle Image">
             </div>
             <button id="give-up-btn" onclick="giveUp()">降参して完成させる</button>
+        </div>
+    </div>
+
+    <!-- 降参確認モーダル -->
+    <div id="giveup-modal">
+        <div class="giveup-dialog">
+            <p>本当に降参して完成させますか？</p>
+            <div class="giveup-dialog-btns">
+                <button id="giveup-yes">降参する 🏳️</button>
+                <button id="giveup-no">もう少し頑張る 💪</button>
+            </div>
         </div>
     </div>
 
@@ -630,33 +711,34 @@
         }
 
         function giveUp() {
-            if (!confirm("本当に降参して完成させますか？")) return;
+            document.getElementById('giveup-modal').classList.add('show');
+        }
 
+        document.getElementById('giveup-yes').addEventListener('click', () => {
+            document.getElementById('giveup-modal').classList.remove('show');
             isGaveUp = true;
             const pieces = document.querySelectorAll('.piece:not(.locked)');
             pieces.forEach(piece => {
                 const targetX = piece.dataset.targetX;
                 const targetY = piece.dataset.targetY;
-
-                // アニメーション付きで移動
                 piece.style.transition = 'all 0.5s ease-out';
                 piece.style.left = targetX + 'px';
                 piece.style.top = targetY + 'px';
-
                 setTimeout(() => {
                     piece.classList.add('locked');
-                    piece.style.transition = 'transform 0.2s ease'; // 元のトランジションに戻す
-
-                    // 最後のピースが動いた後にチェック
+                    piece.style.transition = 'transform 0.2s ease';
                     const currentLocked = document.querySelectorAll('.piece.locked').length;
                     if (currentLocked === rows * cols) {
                         checkCompletion();
                     }
                 }, 500);
             });
-
             document.getElementById('give-up-btn').style.display = 'none';
-        }
+        });
+
+        document.getElementById('giveup-no').addEventListener('click', () => {
+            document.getElementById('giveup-modal').classList.remove('show');
+        });
 
         // ローカルファイルを選択した時の処理
         function handleFileUpload(event) {
